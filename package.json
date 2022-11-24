@@ -10,6 +10,7 @@
   "license": "UNLICENSED",
   "main": "index.js",
   "devDependencies": {
+    "prettier": "^2.8.0",
     "sass": "^1.49.11",
     "terser-webpack-plugin": "^5.3.6",
     "ts-loader": "^9.4.1",
