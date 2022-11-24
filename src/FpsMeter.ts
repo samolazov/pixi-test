@@ -2,15 +2,18 @@ import { app } from "./index";
 import { Text } from "pixi.js";
 
 export class FpsMeter {
+    public readonly element: Text;
+
     constructor() {
-        const meter = new Text(this.text, {
-            fontFamily: 'Arial',
+        this.element = new Text(this.text, {
+            fontFamily: "Arial",
             fontSize: 16,
             fill: 0xaaffaa,
-            align: 'center',
+            align: "center",
         });
-        setInterval(() => meter.text = this.text, 200);
-        app.stage.addChild(meter);
+        this.element.x = 10;
+        this.element.y = 10;
+        setInterval(() => (this.element.text = this.text), 200);
     }
 
     private get text(): string {

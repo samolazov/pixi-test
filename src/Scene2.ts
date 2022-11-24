@@ -1,13 +1,9 @@
-import { menu } from "./index";
 import { Graphics } from "pixi.js";
 import { SceneBase } from "./SceneBase";
 
 export class Scene2 extends SceneBase {
-    public readonly name: string = "Random";
-
     constructor() {
-        super();
-        menu.add(this);
+        super("Random");
     }
 
     protected buildScene(): void {
@@ -18,5 +14,5 @@ export class Scene2 extends SceneBase {
         circle.x = 64;
         circle.y = 130;
         this.container.addChild(circle);
-    };
+    }
 }

@@ -1,12 +1,11 @@
-import { app } from "./index";
+import { app, menu } from "./index";
 import { Container } from "pixi.js";
 
 export abstract class SceneBase {
-    public readonly name: string;
-
     protected readonly container = new Container();
 
-    protected constructor() {
+    protected constructor(public readonly name: string) {
+        menu.add(this);
         this.buildScene();
         this.hide = this.hide.bind(this);
         this.show = this.show.bind(this);
