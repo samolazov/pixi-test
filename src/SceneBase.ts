@@ -6,18 +6,19 @@ export abstract class SceneBase {
 
     protected constructor(public readonly name: string) {
         menu.add(this);
-        this.buildScene();
         this.hide = this.hide.bind(this);
         this.show = this.show.bind(this);
     }
 
     public hide(): void {
-        app.stage.removeChild(this.container)
-    };
+        app.stage.removeChild(this.container);
+        this.container.removeChildren();
+    }
 
     public show(): void {
+        this.buildScene();
         app.stage.addChild(this.container);
-    };
+    }
 
     protected abstract buildScene(): void;
 }

@@ -10,6 +10,8 @@ interface IMenuItem {
 }
 
 export class Menu {
+    public readonly topSafeArea: number = 50;
+
     private readonly items: IMenuItem[] = [];
     private readonly textActive: string = "0xaaaaaa";
     private readonly textIdle: string = "0x555555";
@@ -51,7 +53,7 @@ export class Menu {
     public buildBackground(): void {
         const bg = new Graphics();
         bg.beginFill(0x000000);
-        bg.drawRect(0, 0, window.innerWidth, 40);
+        bg.drawRect(0, 0, window.innerWidth, this.topSafeArea - 10);
         bg.endFill();
         bg.zIndex = 10;
         app.stage.addChild(bg);

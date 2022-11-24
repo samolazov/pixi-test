@@ -1,9 +1,14 @@
-import { app } from "./index";
 import { Text } from "pixi.js";
+import { app, menu } from "./index";
 import { SceneBase } from "./SceneBase";
 import { emojis, sentences } from "./dictionary";
 
 export class Scene2 extends SceneBase {
+    private readonly fontSizeDefault: number = 48;
+    private readonly fontSizeDelta: number = 32;
+    private readonly fontSizeMin: number = 16;
+    private readonly sceneOffset: number = 10;
+
     constructor() {
         super("Random");
     }
@@ -19,12 +24,12 @@ export class Scene2 extends SceneBase {
     private addNewTexts(): void {
         let hasEmoji: boolean = false;
         for (let i = 0; i < 3; i++) {
-            let fontSize: number = 48;
+            let fontSize: number = this.fontSizeDefault;
             let text: string;
             const random = Math.round(Math.random());
             if (hasEmoji || random) {
                 text = this.getText(sentences);
-                fontSize = Math.round(Math.random() * 32) + 16;
+                fontSize = Math.round(Math.random() * this.fontSizeDelta) + this.fontSizeMin;
             } else {
                 text = this.getText(emojis);
                 hasEmoji = true;
@@ -40,10 +45,10 @@ export class Scene2 extends SceneBase {
             fontFamily: "Arial",
             fontSize,
             wordWrap: true,
-            wordWrapWidth: app.stage.width - 20,
+            wordWrapWidth: app.stage.width - this.sceneOffset * 2,
         });
-        element.y = this.container.height + 50;
-        element.x = 10;
+        element.y = this.container.height + menu.topSafeArea;
+        element.x = this.sceneOffset;
         this.container.addChild(element);
     }
 
