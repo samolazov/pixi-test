@@ -29,18 +29,22 @@ export class Scene2 extends SceneBase {
                 text = this.getText(emojis);
                 hasEmoji = true;
             }
-            const element = new Text(text, {
-                align: "left",
-                fill: "white",
-                fontFamily: "Arial",
-                fontSize,
-                wordWrap: true,
-                wordWrapWidth: app.stage.width - 20,
-            });
-            element.y = this.container.height + 50;
-            element.x = 10;
-            this.container.addChild(element);
+            this.createElement(text, fontSize);
         }
+    }
+
+    private createElement(text: string, fontSize: number): void {
+        const element = new Text(text, {
+            align: "left",
+            fill: "white",
+            fontFamily: "Arial",
+            fontSize,
+            wordWrap: true,
+            wordWrapWidth: app.stage.width - 20,
+        });
+        element.y = this.container.height + 50;
+        element.x = 10;
+        this.container.addChild(element);
     }
 
     private getText(dict: string[]): string {
