@@ -1,5 +1,7 @@
-import { Graphics } from "pixi.js";
+import { app } from "./index";
+import { Text } from "pixi.js";
 import { SceneBase } from "./SceneBase";
+import { emojis, sentences } from "./dictionary";
 
 export class Scene2 extends SceneBase {
     constructor() {
@@ -7,12 +9,42 @@ export class Scene2 extends SceneBase {
     }
 
     protected buildScene(): void {
-        const circle = new Graphics();
-        circle.beginFill(0xdddddd);
-        circle.drawCircle(0, 0, 32);
-        circle.endFill();
-        circle.x = 64;
-        circle.y = 130;
-        this.container.addChild(circle);
+        this.addNewTexts();
+        setInterval(() => {
+            this.container.removeChildren();
+            this.addNewTexts();
+        }, 2000);
+    }
+
+    private addNewTexts(): void {
+        let hasEmoji: boolean = false;
+        for (let i = 0; i < 3; i++) {
+            let fontSize: number = 48;
+            let text: string;
+            const random = Math.round(Math.random());
+            if (hasEmoji || random) {
+                text = this.getText(sentences);
+                fontSize = Math.round(Math.random() * 32) + 16;
+            } else {
+                text = this.getText(emojis);
+                hasEmoji = true;
+            }
+            const element = new Text(text, {
+                align: "left",
+                fill: "white",
+                fontFamily: "Arial",
+                fontSize,
+                wordWrap: true,
+                wordWrapWidth: app.stage.width - 20,
+            });
+            element.y = this.container.height + 50;
+            element.x = 10;
+            this.container.addChild(element);
+        }
+    }
+
+    private getText(dict: string[]): string {
+        const n = Math.floor(Math.random() * dict.length);
+        return dict[n];
     }
 }

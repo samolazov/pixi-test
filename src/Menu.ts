@@ -10,19 +10,13 @@ interface IMenuItem {
 }
 
 export class Menu {
-    private readonly container;
     private readonly items: IMenuItem[] = [];
     private readonly textActive: string = "0xaaaaaa";
     private readonly textIdle: string = "0x555555";
 
     constructor() {
-        this.container = new Graphics();
-        this.container.beginFill(0x000000);
-        this.container.drawRect(0, 0, window.innerWidth, 40);
-        this.container.endFill();
-        this.container.zIndex = 10;
-        this.container.addChild(new FpsMeter().element);
-        app.stage.addChild(this.container);
+        this.buildBackground();
+        app.stage.addChild(new FpsMeter().element);
     }
 
     public add(scene: SceneBase): void {
@@ -38,10 +32,10 @@ export class Menu {
         const item: IMenuItem = { active: false, scene, text };
         this.items.push(item);
         const id = this.items.length - 1;
-        text.on("click", () => this.activate(id));
+        text.on("pointerdown", () => this.activate(id));
         text.on("mouseenter", () => this.onItemEnter(item));
         text.on("mouseleave", () => this.onItemLeave(item));
-        this.container.addChild(text);
+        app.stage.addChild(text);
     }
 
     public activate(i: number): void {
@@ -52,6 +46,16 @@ export class Menu {
         item.active = true;
         item.scene.show();
         item.text.style.fill = this.textActive;
+    }
+
+    public buildBackground(): void {
+        const bg = new Graphics();
+        bg.beginFill(0x000000);
+        bg.drawRect(0, 0, window.innerWidth, 40);
+        bg.endFill();
+        bg.zIndex = 10;
+        app.stage.addChild(bg);
+        app.renderer.on("resize", w => (bg.width = w));
     }
 
     private deactivate(item: IMenuItem): void {
