@@ -21,7 +21,7 @@ export class Menu {
             align: 'center',
         });
         text.interactive = true;
-        text.x = this.items.reduce((acc, i) => acc + i.text.width + 10, 50);
+        text.x = this.items.reduce((acc, i) => acc + i.text.width + 10, 100);
         const item: IMenuItem = { active: false, scene, text };
         this.items.push(item);
         const id = this.items.length - 1;
