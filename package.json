@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Just some PIXI test",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "webpack --watch"
   },
   "author": "Ruslan",
   "license": "UNLICENSED",
