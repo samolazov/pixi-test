@@ -9,19 +9,26 @@ export class Scene2 extends SceneBase {
     private readonly fontSizeMin: number = 16;
     private readonly sceneOffset: number = 10;
 
+    private i: NodeJS.Timer;
+
     constructor() {
         super("Random");
     }
 
-    protected buildScene(): void {
-        this.addNewTexts();
-        setInterval(() => {
+    public hide(): void {
+        super.hide();
+        clearInterval(this.i);
+    }
+
+    public show(): void {
+        super.show();
+        this.i = setInterval(() => {
             this.container.removeChildren();
-            this.addNewTexts();
+            this.buildScene();
         }, 2000);
     }
 
-    private addNewTexts(): void {
+    protected buildScene(): void {
         let hasEmoji: boolean = false;
         for (let i = 0; i < 3; i++) {
             let fontSize: number = this.fontSizeDefault;
