@@ -3,19 +3,27 @@ import { app, menu } from "./index";
 import { SceneBase } from "./SceneBase";
 
 export class Scene1 extends SceneBase {
+    private t: ReturnType<typeof setTimeout>;
+
+    private readonly deckAmount: number = 144;
+
     private readonly cardHeight: number = 70;
     private readonly cardOffset: number = 5;
     private readonly cardWidth: number = 50;
-    private readonly deckNumber: number = 144;
-    private readonly fullDeckWidth: number = this.cardOffset * (this.deckNumber - 1) + this.cardWidth;
+    private readonly fullDeckWidth: number = this.cardOffset * (this.deckAmount - 1) + this.cardWidth;
     private readonly sceneOffset: number = 10;
 
     constructor() {
         super("Cards");
     }
 
+    public hide() {
+        super.hide();
+        clearTimeout(this.t);
+    }
+
     protected buildScene(): void {
-        for (let i = 0; i < this.deckNumber; i++) {
+        for (let i = 0; i < this.deckAmount; i++) {
             const card = this.createCard(i);
             this.container.addChild(card);
         }
@@ -23,6 +31,7 @@ export class Scene1 extends SceneBase {
         this.container.y = menu.topSafeArea;
         this.adjustContainer();
         app.renderer.on("resize", this.adjustContainer, this);
+        this.animate();
     }
 
     private adjustContainer(): void {
@@ -42,11 +51,27 @@ export class Scene1 extends SceneBase {
         this.container.scale = { x: scale, y: scale * multiplier };
     }
 
+    private async animate(): Promise<void> {
+        for (let i = this.deckAmount - 1; i >= 0; i--) {
+            await new Promise(resolve => {
+                this.t = setTimeout(resolve, 1000);
+            });
+            this.moveCard(i);
+        }
+    }
+
     private createCard(i: number): Sprite {
         const card = Sprite.from("assets/card.png");
         card.height = this.cardHeight;
         card.width = this.cardWidth;
         card.x = i * this.cardOffset;
         return card;
+    }
+
+    private moveCard(i: number): void {
+        if (!this.t) {
+            return;
+        }
+        console.log(i);
     }
 }
