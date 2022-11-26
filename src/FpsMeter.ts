@@ -13,7 +13,7 @@ export class FpsMeter {
         });
         this.element.x = 10;
         this.element.y = 10;
-        setInterval(() => (this.element.text = this.text), 200);
+        setInterval(() => (this.element.text = this.text), 100);
     }
 
     private get text(): string {

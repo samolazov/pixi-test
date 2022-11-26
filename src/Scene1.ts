@@ -5,16 +5,19 @@ import { SceneBase } from "./SceneBase";
 export class Scene1 extends SceneBase {
     private t: ReturnType<typeof setTimeout>;
 
-    private readonly deckAmount: number = 144;
+    private readonly deckVolume: number = 144;
+    private readonly duration: number = 2; // sec
+    private readonly frequency: number = 1000; // ms
 
     private readonly cardHeight: number = 70;
     private readonly cardOffset: number = 5;
     private readonly cardWidth: number = 50;
-    private readonly fullDeckWidth: number = this.cardOffset * (this.deckAmount - 1) + this.cardWidth;
+    private readonly fullDeckWidth: number = this.cardOffset * (this.deckVolume - 1) + this.cardWidth;
     private readonly sceneOffset: number = 10;
 
     constructor() {
         super("Cards");
+        this.container.sortableChildren = true;
     }
 
     public hide() {
@@ -23,7 +26,7 @@ export class Scene1 extends SceneBase {
     }
 
     protected buildScene(): void {
-        for (let i = 0; i < this.deckAmount; i++) {
+        for (let i = 0; i < this.deckVolume; i++) {
             const card = this.createCard(i);
             this.container.addChild(card);
         }
@@ -52,9 +55,9 @@ export class Scene1 extends SceneBase {
     }
 
     private async animate(): Promise<void> {
-        for (let i = this.deckAmount - 1; i >= 0; i--) {
+        for (let i = this.deckVolume - 1; i >= 0; i--) {
             await new Promise(resolve => {
-                this.t = setTimeout(resolve, 1000);
+                this.t = setTimeout(resolve, this.frequency);
             });
             this.moveCard(i);
         }
@@ -65,6 +68,7 @@ export class Scene1 extends SceneBase {
         card.height = this.cardHeight;
         card.width = this.cardWidth;
         card.x = i * this.cardOffset;
+        card.zIndex = i;
         return card;
     }
 
@@ -72,6 +76,25 @@ export class Scene1 extends SceneBase {
         if (!this.t) {
             return;
         }
-        console.log(i);
+        const card = this.container.children[i];
+        const indexFromEnd = this.deckVolume - i - 1;
+        card.zIndex += indexFromEnd * 2;
+
+        const expectedFrames = this.duration * app.ticker.FPS;
+        const xDestination = indexFromEnd * this.cardOffset;
+        const yDestination = 100;
+        const xDistancePerFrame = (card.x - xDestination) / expectedFrames;
+        const yDistancePerFrame = yDestination / expectedFrames;
+        const handler = () => {
+            if (Math.abs(card.x - xDestination) <= Math.abs(xDistancePerFrame)) {
+                card.x = xDestination;
+                card.y = yDestination;
+                app.ticker.remove(handler);
+                return;
+            }
+            card.x -= xDistancePerFrame;
+            card.y += yDistancePerFrame;
+        };
+        app.ticker.add(handler);
     }
 }
