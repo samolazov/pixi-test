@@ -42,7 +42,7 @@ export class Scene3 extends SceneBase {
     }
 
     protected createSpurt(i: number): Sprite {
-        const spurt = Sprite.from("assets/fire1.png");
+        const spurt = Sprite.from("assets/fire.png");
         const sizeCorrection = 1 - i / 8;
         const xCorrection = 1 - ((i % 2 ? 1 : -1) * i) / 15;
         spurt.height = this.spurtHeight * sizeCorrection;
