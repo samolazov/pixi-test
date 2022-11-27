@@ -14,4 +14,4 @@ new Scene1();
 new Scene2();
 new Scene3();
 
-menu.activate(2);
+menu.activate(0);
