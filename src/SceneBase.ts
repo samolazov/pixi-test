@@ -11,6 +11,7 @@ export abstract class SceneBase {
     }
 
     public hide(): void {
+        app.renderer.off("resize", this.onResize, this);
         app.stage.removeChild(this.container);
         this.container.removeChildren();
     }
@@ -18,7 +19,10 @@ export abstract class SceneBase {
     public show(): void {
         this.buildScene();
         app.stage.addChild(this.container);
+        app.renderer.on("resize", this.onResize, this);
     }
+
+    protected onResize(): void {}
 
     protected abstract buildScene(): void;
 }

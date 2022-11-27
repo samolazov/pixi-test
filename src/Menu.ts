@@ -29,7 +29,7 @@ export class Menu {
             align: "center",
         });
         text.interactive = true;
-        text.x = this.items.reduce((acc, i) => acc + i.text.width + 10, 110);
+        text.x = this.items.reduce((acc, i) => acc + i.text.width + 10, 130);
         text.y = 10;
         const item: IMenuItem = { active: false, scene, text };
         this.items.push(item);

@@ -19,8 +19,6 @@ export class Scene3 extends SceneBase {
 
     constructor() {
         super("Fire");
-        // @ts-ignore
-        window["fire"] = this;
     }
 
     public hide() {
@@ -40,8 +38,7 @@ export class Scene3 extends SceneBase {
             this.container.addChild(spurt);
         }
         this.container.pivot = { x: window.innerWidth / 2, y: window.innerHeight };
-        this.container.x = window.innerWidth / 2;
-        this.container.y = window.innerHeight + this.offset;
+        this.onResize();
     }
 
     protected createSpurt(i: number): Sprite {
@@ -55,8 +52,12 @@ export class Scene3 extends SceneBase {
         spurt.y = window.innerHeight;
         spurt.blendMode = BLEND_MODES.ADD;
         this.animate(spurt);
-        console.log(spurt.x, spurt.y);
         return spurt;
+    }
+
+    protected onResize(): void {
+        this.container.x = window.innerWidth / 2;
+        this.container.y = window.innerHeight + this.offset;
     }
 
     private animate(spurt: Sprite): void {

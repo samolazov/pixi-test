@@ -32,12 +32,11 @@ export class Scene1 extends SceneBase {
         }
         this.container.x = this.sceneOffset;
         this.container.y = menu.topSafeArea;
-        this.adjustContainer();
-        app.renderer.on("resize", this.adjustContainer, this);
+        this.onResize();
         this.animate();
     }
 
-    private adjustContainer(): void {
+    protected onResize(): void {
         let visibleArea: number;
         let multiplier = 1;
         const { innerHeight, innerWidth } = window;

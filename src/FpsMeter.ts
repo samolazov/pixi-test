@@ -1,22 +1,47 @@
 import { app } from "./index";
-import { Text } from "pixi.js";
+import { Container, ITextStyle, Text } from "pixi.js";
+
+const round = (n: number): number => Math.round(n * 100) / 100;
 
 export class FpsMeter {
-    public readonly element: Text;
+    public readonly element: Container;
+
+    private readonly interval = 200; // ms
+    private readonly textOptions: Partial<ITextStyle> = {
+        fontFamily: "Arial",
+        fontSize: 12,
+        fill: 0xaaffaa,
+        align: "center",
+    };
 
     constructor() {
-        this.element = new Text(this.text, {
-            fontFamily: "Arial",
-            fontSize: 16,
-            fill: 0xaaffaa,
-            align: "center",
-        });
-        this.element.x = 10;
-        this.element.y = 10;
-        setInterval(() => (this.element.text = this.text), 100);
+        this.element = new Container();
+        this.buildPixiFps();
+        this.buildWinFps();
     }
 
-    private get text(): string {
-        return `FPS: ${Math.round(app.ticker.FPS * 100) / 100}`;
+    private buildPixiFps(): void {
+        const counter = new Text("", this.textOptions);
+        counter.x = 10;
+        counter.y = 6;
+        this.element.addChild(counter);
+        setInterval(() => (counter.text = `FPS Pixi: ${round(app.ticker.FPS)}`), this.interval);
+    }
+
+    private buildWinFps(): void {
+        const counter = new Text("", this.textOptions);
+        counter.x = 10;
+        counter.y = 20;
+        this.element.addChild(counter);
+
+        let fps: number;
+        let before = Date.now();
+        requestAnimationFrame(function loop() {
+            const now = Date.now();
+            fps = 1000 / (now - before);
+            before = now;
+            requestAnimationFrame(loop);
+        });
+        setInterval(() => (counter.text = `FPS Window: ${round(fps)}`), this.interval);
     }
 }
