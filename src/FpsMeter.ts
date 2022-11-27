@@ -1,11 +1,18 @@
 import { app } from "./index";
 import { Text } from "pixi.js";
 
+const getText = (n: number): string => `FPS: ${Math.round(n * 100) / 100}`;
+
 export class FpsMeter {
-    public readonly element: Text;
+    public element: Text;
 
     constructor() {
-        this.element = new Text(this.text, {
+        this.create();
+        this.run();
+    }
+
+    private create(): void {
+        this.element = new Text(getText(app.ticker.FPS), {
             fontFamily: "Arial",
             fontSize: 16,
             fill: 0xaaffaa,
@@ -13,10 +20,17 @@ export class FpsMeter {
         });
         this.element.x = 10;
         this.element.y = 10;
-        setInterval(() => (this.element.text = this.text), 100);
     }
 
-    private get text(): string {
-        return `FPS: ${Math.round(app.ticker.FPS * 100) / 100}`;
+    private run(): void {
+        let fps: number;
+        let before = Date.now();
+        requestAnimationFrame(function loop() {
+            const now = Date.now();
+            fps = 1000 / (now - before);
+            before = now;
+            requestAnimationFrame(loop);
+        });
+        setInterval(() => (this.element.text = getText(fps)), 200);
     }
 }
