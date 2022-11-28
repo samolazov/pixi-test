@@ -44,14 +44,14 @@ export class Scene3 extends SceneBase {
     protected createSpurt(i: number): Sprite {
         const spurt = Sprite.from("assets/fire.png");
         const sizeCorrection = 1 - i / 8;
-        const xCorrection = 1 - ((i % 2 ? 1 : -1) * i) / 15;
+        const xCorrection = 1 - ((i % 2 ? 1 : -1) * i) / 12;
         spurt.height = this.spurtHeight * sizeCorrection;
         spurt.width = this.spurtWidth * sizeCorrection;
         spurt.pivot = { x: this.spurtWidth / 2, y: this.spurtHeight };
         spurt.x = (window.innerWidth * xCorrection) / 2;
         spurt.y = window.innerHeight;
         spurt.blendMode = BLEND_MODES.ADD;
-        this.animate(spurt);
+        this.animate(spurt, sizeCorrection);
         return spurt;
     }
 
@@ -60,14 +60,14 @@ export class Scene3 extends SceneBase {
         this.container.y = window.innerHeight + this.offset;
     }
 
-    private animate(spurt: Sprite): void {
+    private animate(spurt: Sprite, sizeCorrection: number): void {
         if (!this.enabled) {
             return;
         }
         const t = this.transform;
         const expectedFrames = (t.time / 1000) * app.ticker.FPS;
         const alpha = (1 - t.alpha) / expectedFrames;
-        const scaleY = t.scaleY / expectedFrames;
+        const scaleY = (t.scaleY * sizeCorrection) / expectedFrames;
         const skewX = t.skewX / expectedFrames;
         const handler = () => {
             spurt.alpha -= alpha;
@@ -80,7 +80,7 @@ export class Scene3 extends SceneBase {
             spurt.alpha = 1;
             spurt.scale.y = 0.2;
             spurt.skew.x = 0;
-            this.animate(spurt);
+            this.animate(spurt, sizeCorrection);
         }, t.time);
     }
 
