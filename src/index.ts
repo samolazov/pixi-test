@@ -15,3 +15,9 @@ new Scene2();
 new Scene3();
 
 menu.activate(0);
+
+if (document.fullscreenEnabled) {
+    window.addEventListener("pointerup", () => {
+        (app.view as HTMLCanvasElement).requestFullscreen();
+    });
+}
